@@ -1,0 +1,8 @@
+{
+    "WELCOME_TODOAPP": "Chao mung den voi todo app",
+    "CREATE_SUCCESS" : "Tạo thành công",
+    "UPDATE_SUCCESS" : "Cập nhật thành công",
+    "DELETE_SUCCESS" : "Xóa thành công",
+    "ERROR" : "Đã xảy ra lỗi trong quá trình thực hiện"
+    
+}
