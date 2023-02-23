@@ -7,6 +7,9 @@ const User = new Schema({
     required: true,
     type: String,
   },
+  description: {
+    type: String,
+  },
   email: {
     required: true,
     type: String,

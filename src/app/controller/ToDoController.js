@@ -21,6 +21,7 @@ class ToDoController {
     try {
       const job = new Job({
         name: req.body.name,
+        description: req.body.description,
         authorRef: req.user._id,
       });
 

@@ -10,7 +10,7 @@ const Job = new Schema({
   },
   status: {
     type: String,
-    enum: ['unfinish', 'finish', 'disable'],
+    enum: ['unfulfilled', 'processing', 'done'],
     default: 'unfinish',
   },
   authorRef: {
