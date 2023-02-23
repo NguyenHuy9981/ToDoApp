@@ -15,5 +15,9 @@ module.exports = {
     'class-methods-use-this': 'off',
     'no-underscore-dangle': 'off',
     'no-console': 'off',
+    'object-property-newline': [
+      'error',
+      { allowMultiplePropertiesPerLine: false },
+    ],
   },
 };

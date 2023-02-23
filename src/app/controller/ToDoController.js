@@ -1,17 +1,41 @@
 const Job = require('../models/Job');
 
 class ToDoController {
-  index(req, res) {
-    Job.find({ author: req.user.id })
-      .then((job) => res.status(200).json(job))
-      .catch(res.status(500));
+  async index(req, res) {
+    try {
+      const job = await Job.find({ authorRef: req.user._id });
+
+      return res.json({
+        success: true,
+        data: job,
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: req.i18n_texts.ERROR,
+      });
+    }
   }
 
   async create(req, res) {
-    const job = new Job({
-      name: req.body.name,
-      author: req.user._id,
-    });
+    try {
+      const job = new Job({
+        name: req.body.name,
+        authorRef: req.user._id,
+      });
+
+      await job.save({});
+
+      return res.json({
+        success: true,
+        data: job,
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: req.i18n_texts.ERROR,
+      });
+    }
   }
 
   async update(req, res) {
@@ -20,7 +44,6 @@ class ToDoController {
 
       return res.status(200).json({
         success: true,
-        message: req.i18n_texts.UPDATE_SUCCESS,
       });
     } catch (error) {
       return res.status(500).json({
@@ -37,7 +60,6 @@ class ToDoController {
 
       return res.status(200).json({
         success: true,
-        message: req.i18n_texts.DELETE_SUCCESS,
       });
     } catch (error) {
       return res.status(500).json({
