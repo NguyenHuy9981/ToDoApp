@@ -13,7 +13,10 @@ const Job = new Schema({
     enum: ['unfinish', 'finish', 'disable'],
     default: 'unfinish',
   },
-  author: { type: Schema.Types.ObjectId, ref: 'User' },
+  authorRef: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 
 }, { timestamps: true });
 
