@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+
+const router = express.Router();
 
 const ToDoController = require('../app/Controller/ToDoController');
 const UserController = require('../app/Controller/UserController');
-const auth = require('../app/auth/checkToken')
+const auth = require('../app/auth/checkToken');
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -20,8 +21,8 @@ router.put('/:id', ToDoController.update);
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 
-router.get('/me', auth, UserController.me)
+router.get('/me', auth, UserController.me);
 
-console.log("SUA")
+console.log('SUA');
 
 module.exports = router;
