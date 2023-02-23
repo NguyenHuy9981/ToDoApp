@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+const i18n = require('i18n-express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -17,6 +18,13 @@ dbConnect();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+app.use(i18n({
+  translationsPath: path.join(__dirname, './app/i18n'), // <--- use here. Specify translations files path.
+  siteLangs: ['en', 'vi'],
+  textsVarName: 'translation',
+  defaultLang: ['en'],
+}));
 
 app.use(logger('dev'));
 app.use(express.json());

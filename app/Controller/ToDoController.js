@@ -2,19 +2,47 @@ const Job = require('../models/Job');
 
 class ToDoController {
   index(req, res) {
-    Job.find({ $or: [{ status: 'unfinish' }, { status: 'finish' }] })
+    console.log(req.user.id);
+
+    Job.find({ $or: [{ status: 'unfinish' }, { status: 'finish' }], $and: { author: req.user.id } })
       .then((job) => res.status(200).json(job))
       .catch(res.status(500));
   }
 
-  create(req, res) {
+  async create(req, res) {
     const filter = { name: req.body.name };
     const update = { status: 'unfinish' };
-    const options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-    Job.findOneAndUpdate(filter, update, options)
-      .then((job) => res.status(200).json(job))
-      .catch(res.status(500));
+    try {
+      const jobUpdated = await Job.findOneAndUpdate(filter, update);
+
+      if (!jobUpdated) {
+        const job = new Job({
+          name: req.body.name,
+          author: req.user._id,
+        });
+
+        const saved = await job.save();
+
+        res.json({
+          success: true,
+          message: 'Tao loi',
+          data: saved,
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          message: req.i18n_texts.CREATE_ERROR,
+          data: jobUpdated,
+        });
+      }
+    } catch (error) {
+      res.json({
+        success: false,
+        message: req.i18n_texts.CREATE_ERROR,
+        data: null,
+      });
+    }
   }
 
   update(req, res) {
