@@ -3,7 +3,34 @@ const Job = require('../models/Job');
 class ToDoController {
   async index(req, res) {
     try {
-      const job = await Job.find({ authorRef: req.user._id });
+      const filter = {
+        authorRef: req.user._id,
+      };
+
+      if (req.query.search) {
+        filter.$or = [
+          { name: { $regex: req.query.search } },
+          { description: { $regex: req.query.search } },
+        ];
+      }
+
+      if (req.query.status) {
+        filter.status = req.query.status;
+      }
+
+      if (req.query.timeBegin || req.query.timeEnd) {
+        filter.createdAt = {};
+      }
+
+      if (req.query.timeBegin) {
+        filter.createdAt.$gte = req.query.timeBegin;
+      }
+
+      if (req.query.timeEnd) {
+        filter.createdAt.$lte = req.query.timeEnd;
+      }
+
+      const job = await Job.find(filter);
 
       return res.json({
         success: true,
@@ -23,6 +50,7 @@ class ToDoController {
         name: req.body.name,
         description: req.body.description,
         authorRef: req.user._id,
+        file: req.myFile,
       });
 
       await job.save({});
@@ -69,6 +97,28 @@ class ToDoController {
         error,
       });
     }
+  }
+
+  uploadFile(req, res, next) {
+    const myFile = req.file;
+
+    if (!myFile) {
+      const error = new Error('Please upload a file');
+      error.httpStatusCode = 400;
+      return next(error);
+    }
+    return res.send(myFile);
+  }
+
+  uploadMultiFile(req, res, next) {
+    const myFile = req.files;
+
+    if (!myFile) {
+      const error = new Error('Please upload a file');
+      error.httpStatusCode = 400;
+      return next(error);
+    }
+    return res.send(myFile);
   }
 }
 
