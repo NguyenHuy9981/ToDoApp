@@ -1,13 +1,16 @@
 #!/usr/bin/env node
+/* eslint-disable no-shadow */
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-use-before-define */
 
 /**
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('todoapp:server');
 const http = require('http');
 const dotenv = require('dotenv');
+const app = require('../app');
 
 dotenv.config();
 /**
@@ -88,5 +91,4 @@ function onListening() {
   const bind = typeof addr === 'string'
     ? `pipe ${addr}`
     : `port ${addr.port}`;
-  debug(`Listening on ${bind}`);
 }

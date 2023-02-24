@@ -19,5 +19,7 @@ module.exports = {
       'error',
       { allowMultiplePropertiesPerLine: false },
     ],
+    'no-plusplus': 'off',
+    'import/no-extraneous-dependencies': 'of',
   },
 };
