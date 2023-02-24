@@ -7,6 +7,7 @@ const ToDoController = require('../app/controller/ToDoController');
 const AttachmentController = require('../app/controller/AttachmentController');
 
 router.post('/uploadFile', upload.single('myFile'), AttachmentController.uploadFile);
+router.get('/getFile/:id', AttachmentController.downloadFile);
 
 router.get('/', ToDoController.index);
 router.post('/create', ToDoController.create);

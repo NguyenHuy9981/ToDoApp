@@ -19,6 +19,10 @@ const Attachment = new Schema({
   category: {
     type: String,
   },
+  userRef: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 
 }, { timestamps: true });
 
