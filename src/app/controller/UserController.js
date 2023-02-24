@@ -1,7 +1,10 @@
 const bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const User = require('../models/User');
 const UserValidation = require('../validators/UserValidation');
+const Mail = require('../email/sendEmail');
+const Token = require('../models/Token');
 
 class UserController {
   async register(req, res) {
@@ -67,6 +70,31 @@ class UserController {
     return res.json({
       success: true,
       data: user,
+    });
+  }
+
+  async forgotPass(req, res) {
+    const token = uuidv4();
+
+    const tokenReCord = new Token({
+      userRef: req.user._id,
+      name: token,
+    });
+
+    await tokenReCord.save();
+
+    // const senderEmail = 'Nguyenhuy129981@gmail.com';
+    // const receiverEmail = 'vuongsieu9981@gmail.com';
+    // const emailSubject = 'Mailgun Demo';
+    // const emailBody = `${process.env.DOMAIN}/${req.user._id}/${token}`;
+
+    // User-defined function to send email
+    // Mail.sendMail(senderEmail, receiverEmail, emailSubject, emailBody);
+    return res.json({
+      success: true,
+      data: {
+        token,
+      },
     });
   }
 }
