@@ -15,10 +15,11 @@ module.exports = {
     'class-methods-use-this': 'off',
     'no-underscore-dangle': 'off',
     'no-console': 'off',
+    'func-names': 'off',
     'object-property-newline': [
       'error',
       { allowMultiplePropertiesPerLine: false },
     ],
-    'no-plusplus': 'off'
+    'no-plusplus': 'off',
   },
 };

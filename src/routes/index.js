@@ -1,22 +1,15 @@
 const express = require('express');
-
-const router = express.Router();
-
-const UserController = require('../app/controller/UserController');
 const MiddlewareAuth = require('../app/middleware/auth');
 const MiddlewareSessionAuth = require('../app/middleware/sessionAuth');
 
-router.use('/test', require('./test'));
+const router = express.Router();
 
-router.post('/register', UserController.register);
-router.post('/login', UserController.login);
-
+router.use('/auth', require('./auth'));
 // Middleware
 router.use(MiddlewareAuth.verifyToken);
 router.use(MiddlewareSessionAuth.sessionAuth);
 
-router.get('/me', UserController.me);
 router.use('/todo', require('./todo'));
-router.use('/users', require('./users'));
+router.use('/user', require('./user'));
 
 module.exports = router;

@@ -1,10 +1,9 @@
 const express = require('express');
 const upload = require('../app/middleware/file');
-
-const router = express.Router();
-
 const ToDoController = require('../app/controller/ToDoController');
 const AttachmentController = require('../app/controller/AttachmentController');
+
+const router = express.Router();
 
 router.post('/uploadFile', upload.single('myFile'), AttachmentController.uploadFile);
 router.get('/getFile/:id', AttachmentController.downloadFile);

@@ -1,8 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
-const sessionStorage = require('sessionstorage-for-nodejs');
 const User = require('../models/User');
 const UserValidation = require('../validators/UserValidation');
 const Token = require('../models/Token');
@@ -19,8 +17,8 @@ class UserController {
     if (emailExist) return res.status(400).send('Email đã tồn tại');
 
     // Mã hóa password
-    const salt = await bcrypt.genSalt(10);
-    const hashPass = await bcrypt.hash(req.body.password, salt);
+
+    const hashPass = await User.hashPass(req.body.password);
 
     // Tạo mới
     const newUser = new User();
@@ -54,13 +52,12 @@ class UserController {
     if (!userLogin) return res.status(400).send('Không tìm thấy email');
 
     // Kiểm tra password
-    const passLogin = await bcrypt.compare(req.body.password, userLogin.password);
-    if (!passLogin) return res.status(400).send('Mật khẩu không hợp lệ');
+    const isMatchPass = await User.comparePass(req.body.password, userLogin.password);
+    if (!isMatchPass) return res.status(400).send('Mật khẩu không hợp lệ');
 
     const token = JWT.sign({ _id: userLogin._id }, process.env.SECRET_TOKEN);
 
     // Lưu Session
-    sessionStorage.setItem(`user:${userLogin._id}`, userLogin._id);
 
     return res.status(200).json({
       success: true,
@@ -77,7 +74,6 @@ class UserController {
         password: false,
       });
 
-      sessionStorage.getItem(`user:${req.user._id}`);
       return res.json({
         success: true,
         data: user,
@@ -87,7 +83,7 @@ class UserController {
     }
   }
 
-  async forgotPass(req, res) {
+  async forgotPassRequest(req, res) {
     const token = uuidv4();
 
     const tokenReCord = new Token({
@@ -113,16 +109,19 @@ class UserController {
     });
   }
 
-  async resetPass(req, res) {
+  async forgotPassVerify(req, res) {
+
+  }
+
+  async changePass(req, res) {
     try {
       const userLogin = await User.findOne({ _id: req.user._id });
       // Kiểm tra password
-      const passLogin = await bcrypt.compare(req.body.oldPass, userLogin.password);
-      if (!passLogin) return res.status(400).send('Mật khẩu không hợp lệ');
+      const isMatchPass = await User.comparePass(req.body.oldPass, userLogin.password);
+      if (!isMatchPass) return res.status(400).send('Mật khẩu cũ không đúng');
 
       // Mã hóa password
-      const salt = await bcrypt.genSalt(10);
-      const hashPass = await bcrypt.hash(req.body.newPass, salt);
+      const hashPass = await User.hashPass(req.body.newPass);
 
       // Cập nhật mật khẩu
       await User.updateOne(
@@ -131,8 +130,6 @@ class UserController {
       );
 
       // Xóa Session
-      const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
-      sessionStorage.removeItem(`user:${req.user._id}`, sessionUser);
 
       return res.json({
         success: true,
@@ -145,8 +142,6 @@ class UserController {
   logout(req, res) {
     try {
       // Xóa Session
-      const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
-      sessionStorage.removeItem(`user:${req.user._id}`, sessionUser);
 
       return res.status(200).json({
         success: true,

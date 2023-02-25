@@ -32,7 +32,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true },
 }));
-app.use('/', require('./src/routes/index'));
+app.use('/api', require('./src/routes/index'));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

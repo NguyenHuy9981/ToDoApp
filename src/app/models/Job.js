@@ -31,12 +31,11 @@ const Job = new Schema({
     type: String,
   }],
   processingDay: {
-    type: String,
+    type: Date,
   },
   doneDay: {
-    type: String,
+    type: Date,
   },
-
   authorRef: {
     type: Schema.Types.ObjectId,
     ref: 'User',
