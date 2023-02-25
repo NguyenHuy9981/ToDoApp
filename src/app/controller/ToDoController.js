@@ -100,14 +100,18 @@ class ToDoController {
   }
 
   uploadFile(req, res, next) {
-    const myFile = req.file;
+    try {
+      const myFile = req.file;
 
-    if (!myFile) {
-      const error = new Error('Please upload a file');
-      error.httpStatusCode = 400;
-      return next(error);
+      if (!myFile) {
+        const error = new Error('Please upload a file');
+        error.httpStatusCode = 400;
+        return next(error);
+      }
+      return res.send(myFile);
+    } catch (error) {
+      return res.send('Lỗi');
     }
-    return res.send(myFile);
   }
 
   uploadMultiFile(req, res, next) {

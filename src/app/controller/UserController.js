@@ -114,38 +114,46 @@ class UserController {
   }
 
   async resetPass(req, res) {
-    const userLogin = await User.findOne({ _id: req.user._id });
-    // Kiểm tra password
-    const passLogin = await bcrypt.compare(req.body.oldPass, userLogin.password);
-    if (!passLogin) return res.status(400).send('Mật khẩu không hợp lệ');
+    try {
+      const userLogin = await User.findOne({ _id: req.user._id });
+      // Kiểm tra password
+      const passLogin = await bcrypt.compare(req.body.oldPass, userLogin.password);
+      if (!passLogin) return res.status(400).send('Mật khẩu không hợp lệ');
 
-    // Mã hóa password
-    const salt = await bcrypt.genSalt(10);
-    const hashPass = await bcrypt.hash(req.body.newPass, salt);
+      // Mã hóa password
+      const salt = await bcrypt.genSalt(10);
+      const hashPass = await bcrypt.hash(req.body.newPass, salt);
 
-    // Cập nhật mật khẩu
-    await User.updateOne(
-      { _id: req.user._id },
-      { password: hashPass },
-    );
+      // Cập nhật mật khẩu
+      await User.updateOne(
+        { _id: req.user._id },
+        { password: hashPass },
+      );
 
-    // Xóa Session
-    const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
-    sessionStorage.removeItem(`user:${req.user._id}`, sessionUser);
+      // Xóa Session
+      const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
+      sessionStorage.removeItem(`user:${req.user._id}`, sessionUser);
 
-    return res.json({
-      success: true,
-    });
+      return res.json({
+        success: true,
+      });
+    } catch (error) {
+      return res.send('Lỗi');
+    }
   }
 
   logout(req, res) {
-    // Xóa Session
-    const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
-    sessionStorage.removeItem(`user:${req.user._id}`, sessionUser);
+    try {
+      // Xóa Session
+      const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
+      sessionStorage.removeItem(`user:${req.user._id}`, sessionUser);
 
-    return res.status(200).json({
-      success: true,
-    });
+      return res.status(200).json({
+        success: true,
+      });
+    } catch (error) {
+      return res.send('Lỗi');
+    }
   }
 }
 
