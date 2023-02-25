@@ -4,11 +4,11 @@ const { Schema } = mongoose;
 
 const Token = new Schema({
   userRef: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
     ref: 'user',
   },
-  name: {
+  token: {
     type: String,
     required: true,
   },

@@ -14,7 +14,7 @@ const dbConnect = require('./src/config/db/connect');
 dbConnect();
 
 app.use(i18n({
-  translationsPath: path.join(__dirname, './src/app/i18n'), // <--- use here. Specify translations files path.
+  translationsPath: path.join(__dirname, './src/app/i18n'),
   siteLangs: ['en', 'vi'],
   textsVarName: 'translation',
   defaultLang: ['en'],
@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, './public')));
 app.use(cors());
 app.use(session({
-  secret: '123123ds',
+  secret: 'asdd432',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: true },
