@@ -51,6 +51,8 @@ class ToDoController {
         description: req.body.description,
         authorRef: req.user._id,
         file: req.myFile,
+        processingDay: req.processingDay,
+        doneDay: req.doneDay,
       });
 
       await job.save({});
