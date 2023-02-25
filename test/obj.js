@@ -63,3 +63,9 @@ const object_merge = {
 console.log(object_merge);
 
 */
+
+/*
+product = {name : "heo", price : 15000}
+Object.keys(product) //=> ['name', 'price']
+Object.values(product) //=> ['heo', 15000]
+*/

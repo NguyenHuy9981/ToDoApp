@@ -1,3 +1,4 @@
+const dotenv = require('dotenv');
 const createError = require('http-errors');
 const express = require('express');
 const i18n = require('i18n-express');
@@ -9,6 +10,7 @@ const session = require('express-session');
 
 const app = express();
 
+dotenv.config();
 const dbConnect = require('./src/config/db/connect');
 
 dbConnect();
