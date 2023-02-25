@@ -30,6 +30,13 @@ const Job = new Schema({
   file: [{
     type: String,
   }],
+  processingDay: {
+    type: String,
+  },
+  doneDay: {
+    type: String,
+  },
+
   authorRef: {
     type: Schema.Types.ObjectId,
     ref: 'User',
