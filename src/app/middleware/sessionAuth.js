@@ -1,7 +1,10 @@
+const sessionStorage = require('sessionstorage-for-nodejs');
+
 module.exports = {
-  verifyToken(req, res, next) {
+  sessionAuth(req, res, next) {
     try {
-      if (!req.session.user) {
+      const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
+      if (!sessionUser) {
         return res.status(401).send('Phiên hết hạn, vui lòng đăng nhập lại');
       }
       return next();

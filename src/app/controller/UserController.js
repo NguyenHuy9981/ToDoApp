@@ -2,6 +2,7 @@
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const JWT = require('jsonwebtoken');
+const sessionStorage = require('sessionstorage-for-nodejs');
 const User = require('../models/User');
 const UserValidation = require('../validators/UserValidation');
 const Token = require('../models/Token');
@@ -59,7 +60,7 @@ class UserController {
     const token = JWT.sign({ _id: userLogin._id }, process.env.SECRET_TOKEN);
 
     // Lưu Session
-    req.session.user = userLogin._id;
+    sessionStorage.setItem(`user:${userLogin._id}`, userLogin._id);
 
     return res.status(200).json({
       success: true,
@@ -76,10 +77,10 @@ class UserController {
         password: false,
       });
 
+      sessionStorage.getItem(`user:${req.user._id}`);
       return res.json({
         success: true,
         data: user,
-        tokin: req.session.user,
       });
     } catch (error) {
       return res.send('Loi');
@@ -129,7 +130,8 @@ class UserController {
     );
 
     // Xóa Session
-    req.session.destroy();
+    const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
+    sessionStorage.removeItem(`user:${req.user._id}`, sessionUser);
 
     return res.json({
       success: true,
@@ -137,15 +139,13 @@ class UserController {
   }
 
   logout(req, res) {
-    if (req.session) {
-      // Xóa Session
-      req.session.destroy((err) => {
-        if (err) {
-          return res.json({ err });
-        }
-        return res.json({ logout: 'Success' });
-      });
-    }
+    // Xóa Session
+    const sessionUser = sessionStorage.getItem(`user:${req.user._id}`);
+    sessionStorage.removeItem(`user:${req.user._id}`, sessionUser);
+
+    return res.status(200).json({
+      success: true,
+    });
   }
 }
 
