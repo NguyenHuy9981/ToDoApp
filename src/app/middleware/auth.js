@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { CacheUser } = require('../helper/cache');
+const { strToObjectId } = require('../helper/utils');
 
 module.exports = {
   async verifyToken(req, res, next) {
@@ -15,10 +16,17 @@ module.exports = {
 
       if (!req.user) {
         req.user = await User.findById(verifyUser._id);
-        await Cache.set(req.user);
+        if (req.user) {
+          await Cache.set(req.user);
+        }
       }
 
-      return next();
+      if (req.user) {
+        req.user.objectId = strToObjectId(req.user._id);
+        return next();
+      }
+
+      throw 'USER_NOT_FOUND';
     } catch (err) {
       return res.status(400).send('Token không hợp lệ');
     }

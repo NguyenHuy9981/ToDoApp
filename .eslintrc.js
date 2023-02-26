@@ -22,5 +22,6 @@ module.exports = {
     ],
     'no-plusplus': 'off',
     'quote-props': 'off',
+    'no-throw-literal': 'off',
   },
 };
