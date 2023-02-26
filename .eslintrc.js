@@ -21,5 +21,6 @@ module.exports = {
       { allowMultiplePropertiesPerLine: false },
     ],
     'no-plusplus': 'off',
+    'quote-props': 'off',
   },
 };

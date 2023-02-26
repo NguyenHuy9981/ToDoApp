@@ -11,35 +11,34 @@ const listCache = {
   },
 };
 
-const buildCache = ({ key, ttl }) => {
-  console.log({
-    key,
-    ttl,
-  });
-  return class {
-    constructor(id) {
-      this.id = id;
-      this.ttl = ttl;
-      this.value = null;
-      this.path = `cache:${key}:${id}`;
-    }
+const buildCache = ({ key, ttl }) => class {
+  constructor(id) {
+    this.id = id;
+    this.ttl = ttl;
+    this.value = null;
+    this.path = `cache:${key}:${id}`;
+  }
 
-    async get() {
-      this.value = await redis.get(this.path);
-      return this.value;
+  async get() {
+    this.value = await redis.get(this.path);
+    try {
+      this.value = await JSON.parse(this.value);
+    } catch (error) {
+      // Error
     }
+    return this.value;
+  }
 
-    async set(value) {
-      await redis.set(this.path, JSON.stringify(value));
-      this.value = value;
-      return value;
-    }
+  async set(value) {
+    await redis.set(this.path, JSON.stringify(value));
+    this.value = value;
+    return value;
+  }
 
-    async delete() {
-      await redis.del(this.path);
-      this.value = null;
-    }
-  };
+  async delete() {
+    await redis.del(this.path);
+    this.value = null;
+  }
 };
 
 module.exports = {
