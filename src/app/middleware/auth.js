@@ -8,7 +8,8 @@ module.exports = {
       const token = req.header('auth_token');
 
       if (!token) return res.status(401).send('Vui lòng đăng nhập để được truy cập');
-      const verifyUser = jwt.verify(token, process.env.SECRET_TOKEN); // kiểm tra token
+      const verifyUser = jwt.verify(token, process.env.SECRET_TOKEN);
+
       const Cache = new CacheUser(verifyUser._id);
       req.user = await Cache.get();
 
@@ -19,8 +20,7 @@ module.exports = {
 
       return next();
     } catch (err) {
-      console.error({ err });
-      return res.status(400).send('Token không hợp lệ');// thông báo lỗi khi bạn nhập sai token.
+      return res.status(400).send('Token không hợp lệ');
     }
   },
 };
