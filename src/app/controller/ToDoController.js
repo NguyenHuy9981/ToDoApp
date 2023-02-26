@@ -3,6 +3,7 @@ const Job = require('../models/Job');
 class ToDoController {
   async index(req, res) {
     try {
+      // Filter
       const filter = {
         authorRef: req.user._id,
       };
@@ -30,11 +31,23 @@ class ToDoController {
         filter.createdAt.$lte = req.query.timeEnd;
       }
 
-      const job = await Job.find(filter);
+      // Pagging
+      const page = (req.query.page) ? Math.max(0, Number(req.query.page)) : 0;
+      const limit = (req.query.limit) ? Math.max(0, Number(req.query.limit)) : 100;
+      console.log({
+        page,
+        limit,
+      });
+      const listJob = await Job.find(filter)
+        .limit(limit)
+        .skip(limit * (page - 1));
+
+      const total = await Job.countDocuments(filter);
 
       return res.json({
         success: true,
-        data: job,
+        data: listJob,
+        total,
       });
     } catch (error) {
       return res.json({
@@ -42,6 +55,27 @@ class ToDoController {
         message: req.i18n_texts.ERROR,
       });
     }
+  }
+
+  async stats(req, res) {
+    const data = await Job.aggregate([
+      {
+        $match: {
+          authorRef: req.user.objectId,
+        },
+      },
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return res.json({
+      success: true,
+      data,
+    });
   }
 
   async create(req, res) {
