@@ -10,6 +10,7 @@ router.post('/uploadFile', upload.single('myFile'), AttachmentController.uploadF
 router.get('/getFile/:id', AttachmentController.downloadFile);
 
 router.get('/', ToDoController.index);
+router.get('/stats', ToDoController.stats);
 router.post('/create', ToDoController.create);
 router.put('/:id', ToDoController.update);
 router.post('/:id', ToDoController.update);
