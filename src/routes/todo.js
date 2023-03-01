@@ -13,7 +13,7 @@ router.get('/', ToDoController.index);
 router.get('/stats', ToDoController.stats);
 router.post('/create', ToDoController.create);
 router.put('/:id', ToDoController.update);
-router.post('/:id', ToDoController.update);
+router.delete('/:id', ToDoController.delete);
 
 router.get('/comment', CommentController.detail);
 

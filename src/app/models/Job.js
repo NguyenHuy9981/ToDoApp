@@ -27,8 +27,9 @@ const Job = new Schema({
       default: false,
     },
   }],
-  file: [{
-    type: String,
+  fileRef: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Attachment',
   }],
   processingDay: {
     type: Date,
@@ -40,7 +41,13 @@ const Job = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-
 }, { timestamps: true });
+
+Job.pre('findOneAndUpdate', function (next) {
+  this.options.runValidators = true;
+  this.options.new = true;
+  this.options.returnOriginal = false;
+  next();
+});
 
 module.exports = mongoose.model('Job', Job);

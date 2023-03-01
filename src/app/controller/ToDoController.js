@@ -40,7 +40,7 @@ class ToDoController {
       });
       const listJob = await Job.find(filter)
         .limit(limit)
-        .skip(limit * (page - 1));
+        .skip(limit * page);
 
       const total = await Job.countDocuments(filter);
 
@@ -89,7 +89,7 @@ class ToDoController {
         doneDay: req.doneDay,
       });
 
-      await job.save({});
+      await job.save();
 
       return res.json({
         success: true,
@@ -105,10 +105,14 @@ class ToDoController {
 
   async update(req, res) {
     try {
-      await Job.updateOne({ _id: req.params.id }, req.body);
+      const job = await Job.findOneAndUpdate(
+        { _id: req.params.id },
+        req.body,
+      );
 
       return res.status(200).json({
         success: true,
+        data: job,
       });
     } catch (error) {
       return res.status(500).json({
@@ -121,7 +125,7 @@ class ToDoController {
 
   async delete(req, res) {
     try {
-      await Job.deleteOne({ _id: req.body._id });
+      await Job.deleteOne({ _id: req.params.id });
 
       return res.status(200).json({
         success: true,

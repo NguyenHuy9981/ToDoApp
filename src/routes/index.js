@@ -5,6 +5,7 @@ const MiddlewareSessionAuth = require('../app/middleware/sessionAuth');
 const router = express.Router();
 
 router.use('/auth', require('./auth'));
+
 // Middleware
 router.use(MiddlewareAuth.verifyToken);
 router.use(MiddlewareSessionAuth.sessionAuth);
