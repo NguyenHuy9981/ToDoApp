@@ -12,6 +12,7 @@ router.get('/getFile/:id', AttachmentController.downloadFile);
 router.get('/', ToDoController.index);
 router.get('/stats', ToDoController.stats);
 router.post('/create', ToDoController.create);
+router.get('/:id', ToDoController.detail);
 router.put('/:id', ToDoController.update);
 router.delete('/:id', ToDoController.delete);
 

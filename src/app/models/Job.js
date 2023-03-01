@@ -33,9 +33,11 @@ const Job = new Schema({
   }],
   processingDay: {
     type: Date,
+    default: null,
   },
   doneDay: {
     type: Date,
+    default: null,
   },
   authorRef: {
     type: Schema.Types.ObjectId,

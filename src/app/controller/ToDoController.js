@@ -105,9 +105,20 @@ class ToDoController {
 
   async update(req, res) {
     try {
+      const currentDate = { };
+
+      if (req.body.status === 'done') {
+        currentDate.doneDay = true;
+      } else {
+        req.body.doneDay = null;
+      }
+
       const job = await Job.findOneAndUpdate(
         { _id: req.params.id },
-        req.body,
+        {
+          $set: req.body,
+          $currentDate: currentDate,
+        },
       );
 
       return res.status(200).json({
@@ -163,6 +174,23 @@ class ToDoController {
       return next(error);
     }
     return res.send(myFile);
+  }
+
+  async detail(req, res) {
+    try {
+      const job = await Job.findOne({ _id: req.params.id });
+
+      return res.json({
+        success: true,
+        data: job,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: true,
+        message: req.i18n_texts.ERROR,
+        error,
+      });
+    }
   }
 }
 
