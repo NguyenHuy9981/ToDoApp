@@ -4,11 +4,11 @@ class CommentController {
   async detail(req, res) {
     try {
       const comment = await Comment.find({
-        jobRef: req.query.jobId,
+        jobRef: req.params.todoId,
       });
       return res.json({
         success: true,
-        comment,
+        data: comment,
       });
     } catch (error) {
       return res.status(500).json({
@@ -23,6 +23,7 @@ class CommentController {
       const comment = new Comment({
         content: req.body.content,
         jobRef: req.body.jobId,
+        userRef: req.user.id,
       });
 
       await comment.save();
