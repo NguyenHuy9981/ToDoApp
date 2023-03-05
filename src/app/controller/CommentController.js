@@ -29,7 +29,7 @@ class CommentController {
       await comment.save();
       return res.status(200).json({
         success: true,
-        comment,
+        data: comment,
       });
     } catch (error) {
       return res.status(500).json({

@@ -3,28 +3,32 @@ const Attachment = require('../models/Attachment');
 
 class AttachmentController {
   async uploadFile(req, res, next) {
-    const upload = req.file;
+    try {
+      const upload = req.file;
 
-    if (!upload) {
-      const error = new Error('Please upload a file');
-      error.httpStatusCode = 400;
-      return next(error);
+      if (!upload) {
+        const error = new Error('Please upload a file');
+        error.httpStatusCode = 400;
+        return next(error);
+      }
+
+      const attachment = new Attachment({
+        name: upload.fieldname,
+        path: upload.path,
+        type: upload.mimetype,
+        file_size: upload.size,
+        userRef: req.user._id,
+      });
+
+      await attachment.save();
+
+      return res.json({
+        success: true,
+        data: attachment,
+      });
+    } catch (error) {
+      return res.send('Error Upload');
     }
-
-    const attachment = new Attachment({
-      name: upload.fieldname,
-      path: upload.path,
-      type: upload.mimetype,
-      file_size: upload.size,
-      userRef: req.user._id,
-    });
-
-    await attachment.save();
-
-    return res.json({
-      success: true,
-      data: attachment,
-    });
   }
 
   async downloadFile(req, res) {

@@ -16,7 +16,12 @@ const User = new Schema({
     required: true,
     type: String,
   },
-
+  role: {
+    required: true,
+    type: String,
+    default: 'user',
+    enum: ['user', 'manager', 'admin', 'root'],
+  },
 }, { timestamps: true });
 
 User.statics.hashPass = async function (password) {

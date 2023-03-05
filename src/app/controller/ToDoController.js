@@ -84,7 +84,7 @@ class ToDoController {
         name: req.body.name,
         description: req.body.description,
         authorRef: req.user._id,
-        file: req.myFile,
+        fileRef: req.body.fileRef,
         processingDay: req.processingDay,
         doneDay: req.doneDay,
       });
@@ -152,28 +152,28 @@ class ToDoController {
 
   uploadFile(req, res, next) {
     try {
-      const myFile = req.file;
+      const fileUpload = req.file;
 
-      if (!myFile) {
+      if (!fileUpload) {
         const error = new Error('Please upload a file');
         error.httpStatusCode = 400;
         return next(error);
       }
-      return res.send(myFile);
+      return res.send(fileUpload);
     } catch (error) {
       return res.send('Lỗi');
     }
   }
 
   uploadMultiFile(req, res, next) {
-    const myFile = req.files;
+    const fileUpload = req.files;
 
-    if (!myFile) {
+    if (!fileUpload) {
       const error = new Error('Please upload a file');
       error.httpStatusCode = 400;
       return next(error);
     }
-    return res.send(myFile);
+    return res.send(fileUpload);
   }
 
   async detail(req, res) {

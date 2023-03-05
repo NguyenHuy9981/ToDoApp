@@ -5,7 +5,7 @@ const AttachmentController = require('../../app/controller/AttachmentController'
 
 const router = express.Router();
 
-router.post('/create', upload.single('myFile'), AttachmentController.uploadFile);
+router.post('/create', upload.single('file'), AttachmentController.uploadFile);
 router.get('/:id', AttachmentController.downloadFile);
 
 module.exports = router;
