@@ -134,7 +134,12 @@ class UserController {
       const userLogin = await User.findOne({ _id: req.user._id });
       // Kiểm tra password
       const isMatchPass = await User.comparePass(req.body.oldPass, userLogin.password);
-      if (!isMatchPass) return res.status(400).send('Mật khẩu cũ không đúng');
+      if (!isMatchPass) {
+        return res.json({
+          success: false,
+          message: 'Mật khẩu cũ không đúng',
+        });
+      }
 
       // Mã hóa password
       const hashPass = await User.hashPass(req.body.newPass);

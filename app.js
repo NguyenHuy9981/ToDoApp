@@ -26,10 +26,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, './uploads')));
+app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 app.use(cors());
 app.use(session({
-  secret: 'asdd432',
+  secret: 'pass123',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: true },
