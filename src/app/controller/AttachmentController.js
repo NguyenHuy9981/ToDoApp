@@ -13,7 +13,8 @@ class AttachmentController {
       }
 
       const attachment = new Attachment({
-        name: upload.fieldname,
+        name: upload.originalname,
+        fileName: upload.filename,
         path: upload.path,
         type: upload.mimetype,
         fileSize: upload.size,

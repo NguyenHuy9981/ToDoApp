@@ -6,6 +6,9 @@ const Attachment = new Schema({
   name: {
     type: String,
   },
+  fileName: {
+    type: String,
+  },
   path: {
     required: true,
     type: String,
