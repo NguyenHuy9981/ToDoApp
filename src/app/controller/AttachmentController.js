@@ -16,7 +16,7 @@ class AttachmentController {
         name: upload.fieldname,
         path: upload.path,
         type: upload.mimetype,
-        file_size: upload.size,
+        fileSize: upload.size,
         userRef: req.user._id,
       });
 

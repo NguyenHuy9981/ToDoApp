@@ -13,7 +13,7 @@ const Attachment = new Schema({
   type: {
     type: String,
   },
-  file_size: {
+  fileSize: {
     type: String,
   },
   category: {

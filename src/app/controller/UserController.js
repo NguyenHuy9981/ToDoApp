@@ -145,7 +145,7 @@ class UserController {
         { password: hashPass },
       );
 
-      // Xóa Session
+      // Xóa Session, fontend xử lý
 
       return res.json({
         success: true,
@@ -157,7 +157,7 @@ class UserController {
 
   logout(req, res) {
     try {
-      // Xóa Session
+      // Xóa Session, fontend xử lý
 
       return res.status(200).json({
         success: true,

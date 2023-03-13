@@ -103,6 +103,54 @@ class ToDoController {
     }
   }
 
+  async addFile(req, res) {
+    try {
+      const fileRef = req.body.file;
+
+      const job = await Job.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $push: { fileRef },
+        },
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: job,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: true,
+        message: req.i18n_texts.ERROR,
+        error,
+      });
+    }
+  }
+
+  async removeFile(req, res) {
+    try {
+      const fileRef = req.body.file;
+
+      const job = await Job.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $pull: { fileRef },
+        },
+      );
+
+      return res.status(200).json({
+        success: true,
+        data: job,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: true,
+        message: req.i18n_texts.ERROR,
+        error,
+      });
+    }
+  }
+
   async update(req, res) {
     try {
       const currentDate = { };
@@ -178,7 +226,10 @@ class ToDoController {
 
   async detail(req, res) {
     try {
-      const job = await Job.findOne({ _id: req.params.id });
+      const job = await Job.findOne({ _id: req.params.id }).populate({
+        path: 'fileRef',
+        select: ['name', 'path', 'type'],
+      });
 
       return res.json({
         success: true,

@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/me', UserController.me);
 
-router.post('/changePass', UserController.changePass);
+router.put('/changePass', UserController.changePass);
 
 router.get('/logout', UserController.logout);
 

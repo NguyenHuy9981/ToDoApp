@@ -8,6 +8,8 @@ router.get('/stats', ToDoController.stats);
 router.post('/create', ToDoController.create);
 router.get('/:id', ToDoController.detail);
 router.put('/:id', ToDoController.update);
+router.put('/addFile/:id', ToDoController.addFile);
+router.put('/removeFile/:id', ToDoController.removeFile);
 router.delete('/:id', ToDoController.delete);
 
 router.use('/comment', require('./comment'));
