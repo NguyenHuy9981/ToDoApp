@@ -105,7 +105,7 @@ class ToDoController {
 
   async addFile(req, res) {
     try {
-      const fileRef = req.body.file;
+      const { fileRef } = req.body;
 
       const job = await Job.findOneAndUpdate(
         { _id: req.params.id },
@@ -228,7 +228,6 @@ class ToDoController {
     try {
       const job = await Job.findOne({ _id: req.params.id }).populate({
         path: 'fileRef',
-        select: ['name', 'path', 'type'],
       });
 
       return res.json({
