@@ -84,10 +84,17 @@ class UserController {
   }
 
   async forgotPassRequest(req, res) {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: 'Tài khoản không tồn tại',
+      });
+    }
     const token = uuidv4();
 
     const tokenReCord = new Token({
-      userRef: req.body.email,
+      userRef: user._id,
       token,
     });
 
@@ -113,20 +120,31 @@ class UserController {
   async checkTokenForgot(req, res) {
     const resetToken = await Token.findOne({ token: req.body.token });
     if (!resetToken) {
-      return res.send('Token không trùng khớp');
+      return res.json({
+        success: false,
+        message: 'Token không trùng khớp',
+      });
     }
 
     return res.json({
       success: true,
-      email: resetToken.userRef,
+      token: resetToken.token,
     });
   }
 
   async forgotPassVerify(req, res) {
-    const hashPass = await User.hashPass(req.body.password);
-    await User.updateOne({ email: req.body.email }, { password: hashPass });
-    await Token.deleteOne({});
-    return res.json({ success: true });
+    try {
+      const token = await Token.findOne({ token: req.body.token });
+      if (!req.body.password) {
+        return res.json({ success: false });
+      }
+      const hashPass = await User.hashPass(req.body.password);
+      await User.updateOne({ _id: token.userRef }, { password: hashPass });
+      await Token.deleteMany({ userRef: token.userRef });
+      return res.json({ success: true });
+    } catch (error) {
+      return res.status('400').send('Lỗi');
+    }
   }
 
   async changePass(req, res) {
