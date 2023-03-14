@@ -4,9 +4,8 @@ const { Schema } = mongoose;
 
 const Token = new Schema({
   userRef: {
-    type: String,
-    required: true,
-    ref: 'user',
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   token: {
     type: String,
