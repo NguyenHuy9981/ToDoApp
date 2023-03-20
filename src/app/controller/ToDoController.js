@@ -32,15 +32,14 @@ class ToDoController {
       }
 
       // Pagging
-      const page = (req.query.page) ? Math.max(0, Number(req.query.page)) : 0;
-      const limit = (req.query.limit) ? Math.max(0, Number(req.query.limit)) : 100;
-      console.log({
-        page,
-        limit,
-      });
+      const page = (req.query._page) ? Math.max(0, Number(req.query._page)) : 1;
+      const limit = (req.query._limit) ? Math.max(0, Number(req.query._limit)) : 100;
+
       const listJob = await Job.find(filter)
         .limit(limit)
-        .skip(limit * page);
+        .skip(limit * (page - 1)).sort({
+          createdAt: -1,
+        });
 
       const total = await Job.countDocuments(filter);
 
