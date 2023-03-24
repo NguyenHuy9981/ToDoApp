@@ -3,9 +3,12 @@ const Comment = require('../models/Comment');
 class CommentController {
   async detail(req, res) {
     try {
-      const comment = await Comment.find({
-        jobRef: req.params.todoId,
-      });
+      const comment = await Comment
+        .find({
+          jobRef: req.params.todoId,
+        }).sort({
+          createdAt: -1,
+        });
       return res.json({
         success: true,
         data: comment,

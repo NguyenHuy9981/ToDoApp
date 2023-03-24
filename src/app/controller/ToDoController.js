@@ -128,12 +128,14 @@ class ToDoController {
 
   async removeFile(req, res) {
     try {
-      const fileRef = req.body.file;
+      const { fileRef: fileId } = req.body;
 
       const job = await Job.findOneAndUpdate(
         { _id: req.params.id },
         {
-          $pull: { fileRef },
+          $pull: {
+            fileRef: fileId,
+          },
         },
       );
 
