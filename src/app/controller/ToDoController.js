@@ -70,7 +70,11 @@ class ToDoController {
         },
       },
     ]);
-
+    const total = await Job.countDocuments();
+    data.push({
+      '_id': 'all',
+      'count': total,
+    });
     return res.json({
       success: true,
       data,
